@@ -3,7 +3,6 @@ package com.wallet.bankwallet.service;
 import com.wallet.bankwallet.entity.User;
 import com.wallet.bankwallet.entity.Wallet;
 import com.wallet.bankwallet.exception.UserNotFoundException;
-import com.wallet.bankwallet.exception.WalletNotFoundException;
 import com.wallet.bankwallet.repository.UserRepository;
 import com.wallet.bankwallet.repository.WalletRepository;
 import jakarta.transaction.Transactional;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
