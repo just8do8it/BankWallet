@@ -35,6 +35,20 @@ public class WalletService {
     }
 
     @Transactional
+    public Wallet deposit(Long id, BigDecimal amount) throws WalletNotFoundException {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be > 0");
+        }
+
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new WalletNotFoundException(id));
+
+        wallet.setBalance(wallet.getBalance().add(amount));
+
+        return wallet;
+    }
+
+    @Transactional
     public Wallet withdraw(Long id, BigDecimal amount) throws WalletNotFoundException, InsufficientFundsException {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be > 0");
@@ -50,5 +64,27 @@ public class WalletService {
         wallet.setBalance(wallet.getBalance().subtract(amount));
 
         return wallet;
+    }
+
+    @Transactional
+    public Wallet transfer(Long sourceId, Long destinationId, BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be > 0");
+        }
+
+        Wallet sourceWallet = walletRepository.findById(sourceId)
+                .orElseThrow(() -> new WalletNotFoundException(sourceId));
+
+        Wallet destinationWallet = walletRepository.findById(destinationId)
+                .orElseThrow(() -> new WalletNotFoundException(destinationId));
+
+        if (sourceWallet.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientFundsException(sourceId);
+        }
+
+        sourceWallet.setBalance(sourceWallet.getBalance().subtract(amount));
+        destinationWallet.setBalance(destinationWallet.getBalance().add(amount));
+
+        return sourceWallet;
     }
 }
