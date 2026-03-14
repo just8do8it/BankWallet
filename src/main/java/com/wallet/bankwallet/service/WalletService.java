@@ -1,0 +1,54 @@
+package com.wallet.bankwallet.service;
+
+import com.wallet.bankwallet.entity.Wallet;
+import com.wallet.bankwallet.exception.InsufficientFundsException;
+import com.wallet.bankwallet.exception.UserNotFoundException;
+import com.wallet.bankwallet.exception.WalletNotFoundException;
+import com.wallet.bankwallet.repository.WalletRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class WalletService {
+    private final WalletRepository walletRepository;
+
+    public List<Wallet> findAll() {
+        return walletRepository.findAll();
+    }
+
+    public Wallet findById(Long id) throws WalletNotFoundException {
+        return walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException(id));
+    }
+
+    public Wallet findByUserId(Long id) throws UserNotFoundException {
+        return walletRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public Wallet save(Wallet wallet) {
+        return walletRepository.save(wallet);
+    }
+
+    @Transactional
+    public Wallet withdraw(Long id, BigDecimal amount) throws WalletNotFoundException, InsufficientFundsException {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be > 0");
+        }
+
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new WalletNotFoundException(id));
+
+        if (wallet.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientFundsException(id);
+        }
+
+        wallet.setBalance(wallet.getBalance().subtract(amount));
+
+        return wallet;
+    }
+}
