@@ -18,7 +18,7 @@ mvn spring-boot:run
 The application will start on:
 * http://localhost:8080
 
-If you use H2 in‑memory, the H2 console is typically available at:
+The H2 console is available at:
 * http://localhost:8080/h2-console
 
 To connect to the DB, use JDBC URL: _"jdbc:h2:mem:testdb"_ (or whatever you configured in the **_application.properties_** file)
