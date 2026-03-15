@@ -29,8 +29,9 @@ public class WalletService {
         return walletRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public Wallet save(Wallet wallet) {
-        return walletRepository.save(wallet);
+    public void deleteById(Long id) throws WalletNotFoundException {
+        Wallet wallet = walletRepository.findByUserId(id).orElseThrow(() -> new WalletNotFoundException(id));
+        walletRepository.deleteById(wallet.getId());
     }
 
     @Transactional
