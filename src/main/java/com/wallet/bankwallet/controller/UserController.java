@@ -1,7 +1,7 @@
 package com.wallet.bankwallet.controller;
 
-import com.wallet.bankwallet.entity.User;
-import com.wallet.bankwallet.request.UserRequest;
+import com.wallet.bankwallet.model.User;
+import com.wallet.bankwallet.model.UserRequest;
 import com.wallet.bankwallet.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

@@ -1,11 +1,11 @@
 package com.wallet.bankwallet.service;
 
-import com.wallet.bankwallet.entity.User;
-import com.wallet.bankwallet.entity.Wallet;
+import com.wallet.bankwallet.model.User;
+import com.wallet.bankwallet.model.Wallet;
 import com.wallet.bankwallet.exception.UserNotFoundException;
 import com.wallet.bankwallet.repository.UserRepository;
 import com.wallet.bankwallet.repository.WalletRepository;
-import com.wallet.bankwallet.request.UserRequest;
+import com.wallet.bankwallet.model.UserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

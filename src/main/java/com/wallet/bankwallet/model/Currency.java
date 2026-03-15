@@ -1,4 +1,4 @@
-package com.wallet.bankwallet.entity;
+package com.wallet.bankwallet.model;
 
 public enum Currency {
     EUR, USD, BGN;

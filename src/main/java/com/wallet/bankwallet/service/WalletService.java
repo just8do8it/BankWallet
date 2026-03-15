@@ -1,6 +1,6 @@
 package com.wallet.bankwallet.service;
 
-import com.wallet.bankwallet.entity.Wallet;
+import com.wallet.bankwallet.model.Wallet;
 import com.wallet.bankwallet.exception.InsufficientFundsException;
 import com.wallet.bankwallet.exception.UserNotFoundException;
 import com.wallet.bankwallet.exception.WalletNotFoundException;

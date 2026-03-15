@@ -1,4 +1,4 @@
-package com.wallet.bankwallet.request;
+package com.wallet.bankwallet.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

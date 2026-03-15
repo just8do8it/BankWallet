@@ -1,6 +1,6 @@
 package com.wallet.bankwallet.repository;
 
-import com.wallet.bankwallet.entity.Wallet;
+import com.wallet.bankwallet.model.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
