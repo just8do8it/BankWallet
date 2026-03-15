@@ -3,6 +3,7 @@ package com.wallet.bankwallet;
 import com.wallet.bankwallet.exception.InsufficientFundsException;
 import com.wallet.bankwallet.exception.UserNotFoundException;
 import com.wallet.bankwallet.exception.WalletNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,23 +12,30 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException ex) {
+        log.warn("User not found: {}", ex.getMessage());
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError("User not found", ex.getMessage()));
     }
 
     @ExceptionHandler(WalletNotFoundException.class)
     public ResponseEntity<ApiError> handleWalletNotFound(WalletNotFoundException ex) {
+        log.warn("Wallet not found: {}", ex.getMessage());
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError("Wallet not found", ex.getMessage()));
     }
 
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<ApiError> handleInsufficientFunds(InsufficientFundsException ex) {
+        log.warn("Insufficient funds: {}", ex.getMessage());
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiError("Insufficient funds", ex.getMessage()));
     }

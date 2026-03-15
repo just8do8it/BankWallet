@@ -8,11 +8,13 @@ import com.wallet.bankwallet.repository.WalletRepository;
 import com.wallet.bankwallet.model.UserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -35,6 +37,8 @@ public class UserService {
 
     @Transactional
     public User save(UserRequest request) {
+        log.info("User with name={} and email={} created", request.getName(), request.getEmail());
+
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());

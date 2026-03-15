@@ -7,11 +7,13 @@ import com.wallet.bankwallet.exception.WalletNotFoundException;
 import com.wallet.bankwallet.repository.WalletRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WalletService {
@@ -36,6 +38,8 @@ public class WalletService {
 
     @Transactional
     public Wallet deposit(Long id, BigDecimal amount) throws WalletNotFoundException {
+        log.info("Deposit amount={} to wallet={}", amount, id);
+
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be > 0");
         }
@@ -50,6 +54,8 @@ public class WalletService {
 
     @Transactional
     public Wallet withdraw(Long id, BigDecimal amount) throws WalletNotFoundException, InsufficientFundsException {
+        log.info("Withdraw amount={} from wallet={}", amount, id);
+
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be > 0");
         }
@@ -68,6 +74,8 @@ public class WalletService {
 
     @Transactional
     public Wallet transfer(Long sourceId, Long destinationId, BigDecimal amount) {
+        log.info("Transfer amount={} from wallet={} to wallet={}", amount, sourceId, destinationId);
+
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be > 0");
         }
