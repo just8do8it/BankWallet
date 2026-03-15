@@ -1,7 +1,11 @@
 package com.wallet.bankwallet.controller;
 
 import com.wallet.bankwallet.entity.Wallet;
+import com.wallet.bankwallet.request.TransferRequest;
 import com.wallet.bankwallet.service.WalletService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,30 +30,26 @@ public class WalletController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Wallet> getWalletById(@PathVariable Long id) {
+    public ResponseEntity<Wallet> getWalletById(@PathVariable @NotNull @Positive Long id) {
         return ResponseEntity.ok(walletService.findById(id));
     }
 
     @PostMapping("/{id}/deposit/{amount}")
-    public ResponseEntity<Wallet> deposit(@PathVariable Long id, @PathVariable BigDecimal amount) {
+    public ResponseEntity<Wallet> deposit(@PathVariable @NotNull @Positive Long id,
+                                          @PathVariable BigDecimal amount) {
         return ResponseEntity.ok(walletService.deposit(id, amount));
     }
 
     @PostMapping("/{id}/withdraw/{amount}")
-    public ResponseEntity<Wallet> withdraw(@PathVariable Long id, @PathVariable BigDecimal amount) {
+    public ResponseEntity<Wallet> withdraw(@PathVariable @NotNull @Positive Long id,
+                                           @PathVariable BigDecimal amount) {
         return ResponseEntity.ok(walletService.withdraw(id, amount));
     }
 
-    @PostMapping("/{sourceId}/{destinationId}/{amount}")
-    public ResponseEntity<Wallet> transfer(@PathVariable Long sourceId,
-                                                @PathVariable Long destinationId,
-                                                @PathVariable BigDecimal amount) {
-        return ResponseEntity.ok(walletService.transfer(sourceId, destinationId, amount));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWallet(@PathVariable Long id) {
-        walletService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/transfer")
+    public ResponseEntity<Wallet> transfer(@Valid @PathVariable TransferRequest request) {
+        return ResponseEntity.ok(
+                walletService.transfer(request.getSourceId(), request.getDestinationId(), request.getAmount())
+        );
     }
 }
