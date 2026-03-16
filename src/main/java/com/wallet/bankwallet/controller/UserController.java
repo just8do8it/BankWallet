@@ -80,7 +80,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid request body")
     })
     public User createUser(@Valid @RequestBody UserRequest request) {
-        return userService.save(request);
+        return userService.save(request.getName(), request.getEmail());
     }
 
     @PutMapping("/{id}")
@@ -95,7 +95,7 @@ public class UserController {
     })
     public User updateUser(@PathVariable @NotNull @Positive Long id,
                            @Valid @RequestBody UserRequest request) {
-        return userService.update(id, request);
+        return userService.update(id, request.getName(), request.getEmail());
     }
 
     @DeleteMapping("/{id}")

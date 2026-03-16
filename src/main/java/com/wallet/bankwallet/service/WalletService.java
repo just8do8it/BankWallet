@@ -1,5 +1,6 @@
 package com.wallet.bankwallet.service;
 
+import com.wallet.bankwallet.model.Currency;
 import com.wallet.bankwallet.model.Wallet;
 import com.wallet.bankwallet.exception.InsufficientFundsException;
 import com.wallet.bankwallet.exception.UserNotFoundException;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WalletService {
     private final WalletRepository walletRepository;
+    private final ExchangeRatesClient exchangeRatesClient;
 
     public List<Wallet> findAll() {
         return walletRepository.findAll();
@@ -37,7 +39,7 @@ public class WalletService {
     }
 
     @Transactional
-    public Wallet deposit(Long id, BigDecimal amount) throws WalletNotFoundException {
+    public Wallet deposit(Long id, BigDecimal amount, Currency currency) throws WalletNotFoundException {
         log.info("Deposit amount={} to wallet={}", amount, id);
 
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -47,7 +49,17 @@ public class WalletService {
         Wallet wallet = walletRepository.findById(id)
                 .orElseThrow(() -> new WalletNotFoundException(id));
 
-        wallet.setBalance(wallet.getBalance().add(amount));
+        BigDecimal amountEUR;
+        if (currency == Currency.EUR) {
+            amountEUR = amount;
+        } else {
+            amountEUR = exchangeRatesClient.convertToEur(
+                    currency,
+                    amount
+            );
+        }
+
+        wallet.setBalance(wallet.getBalance().add(amountEUR));
 
         return wallet;
     }

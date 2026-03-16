@@ -2,10 +2,10 @@ DELETE FROM wallets;
 DELETE FROM users;
 
 INSERT INTO users (id, name, email)
-VALUES (1, 'Alice Smith',   'alice@example.com');
+VALUES (1, 'Alice Smith', 'alice@example.com');
 
 INSERT INTO users (id, name, email)
-VALUES (2, 'Bob Brown',     'bob@example.com');
+VALUES (2, 'Bob Brown', 'bob@example.com');
 
 INSERT INTO users (id, name, email)
 VALUES (3, 'Charlie Davis', 'charlie@example.com');

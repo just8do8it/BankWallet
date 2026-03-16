@@ -1,16 +1,15 @@
 package com.wallet.bankwallet.service;
 
+import com.wallet.bankwallet.model.Currency;
 import com.wallet.bankwallet.model.User;
 import com.wallet.bankwallet.model.Wallet;
 import com.wallet.bankwallet.exception.UserNotFoundException;
 import com.wallet.bankwallet.repository.UserRepository;
 import com.wallet.bankwallet.repository.WalletRepository;
-import com.wallet.bankwallet.model.UserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -36,29 +35,30 @@ public class UserService {
     }
 
     @Transactional
-    public User save(UserRequest request) {
-        log.info("User with name={} and email={} created", request.getName(), request.getEmail());
+    public User save(String name, String email) {
+        log.info("User with name={} and email={} created", name, email);
 
         User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        user.setName(name);
+        user.setEmail(email);
         userRepository.save(user);
 
         Wallet wallet = new Wallet();
         wallet.setUser(user);
         wallet.setBalance(BigDecimal.ZERO);
+        wallet.setCurrency(Currency.EUR);
         walletRepository.save(wallet);
 
         return user;
     }
 
     @Transactional
-    public User update(Long id, UserRequest request) {
+    public User update(Long id, String name, String email) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        user.setName(name);
+        user.setEmail(email);
 
         return userRepository.save(user);
     }

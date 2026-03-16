@@ -1,7 +1,9 @@
 package com.wallet.bankwallet.controller;
 
+import com.wallet.bankwallet.model.DepositRequest;
 import com.wallet.bankwallet.model.Wallet;
 import com.wallet.bankwallet.model.TransferRequest;
+import com.wallet.bankwallet.model.WithdrawRequest;
 import com.wallet.bankwallet.service.WalletService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +55,7 @@ public class WalletController {
         return ResponseEntity.ok(walletService.findById(id));
     }
 
-    @PostMapping("/{id}/deposit/{amount}")
+    @PostMapping("/deposit")
     @Operation(
             summary = "Deposit into wallet",
             description = "Increases the balance of the wallet by the given amount."
@@ -63,12 +65,15 @@ public class WalletController {
             @ApiResponse(responseCode = "400", description = "Invalid id or amount supplied"),
             @ApiResponse(responseCode = "404", description = "Wallet not found")
     })
-    public ResponseEntity<Wallet> deposit(@PathVariable @NotNull @Positive Long id,
-                                          @PathVariable BigDecimal amount) {
-        return ResponseEntity.ok(walletService.deposit(id, amount));
+    public ResponseEntity<Wallet> deposit(@Valid @RequestBody DepositRequest request) {
+        return ResponseEntity.ok(
+                walletService.deposit(
+                    request.getWalletId(), request.getAmount(), request.getCurrency()
+                )
+        );
     }
 
-    @PostMapping("/{id}/withdraw/{amount}")
+    @PostMapping("/withdraw")
     @Operation(
             summary = "Withdraw from wallet",
             description = "Decreases the balance of the wallet by the given amount."
@@ -78,9 +83,8 @@ public class WalletController {
             @ApiResponse(responseCode = "400", description = "Invalid id or amount, or insufficient funds"),
             @ApiResponse(responseCode = "404", description = "Wallet not found")
     })
-    public ResponseEntity<Wallet> withdraw(@PathVariable @NotNull @Positive Long id,
-                                           @PathVariable BigDecimal amount) {
-        return ResponseEntity.ok(walletService.withdraw(id, amount));
+    public ResponseEntity<Wallet> withdraw(@Valid @RequestBody WithdrawRequest request) {
+        return ResponseEntity.ok(walletService.withdraw(request.getWalletId(), request.getAmount()));
     }
 
     @PostMapping("/transfer")
@@ -95,7 +99,9 @@ public class WalletController {
     })
     public ResponseEntity<Wallet> transfer(@Valid @RequestBody TransferRequest request) {
         return ResponseEntity.ok(
-                walletService.transfer(request.getSourceId(), request.getDestinationId(), request.getAmount())
+                walletService.transfer(
+                        request.getSourceId(), request.getDestinationId(), request.getAmount()
+                )
         );
     }
 }
