@@ -51,3 +51,5 @@ To connect to the DB, use JDBC URL: _"jdbc:h2:mem:testdb"_ (or whatever you conf
 - H2 Database (in‑memory) – relational database for development/testing
 - Jakarta Validation / Hibernate Validator – request and DTO validation
 - Lombok – boilerplate reduction (@Data, @Getter, @Setter, @AllArgsConstructor, @NoArgsConstructor, @Slf4j)
+- Swagger/OpenAPI - documenting the REST endpoints
+- _exchangeratesapi_ (from https://docs.apilayer.com/) - currency exchange API for deposits
