@@ -28,10 +28,11 @@ To connect to the DB, use JDBC URL: _"jdbc:h2:mem:testdb"_ (or whatever you conf
 ## API overview
 
 #### User Controller
-- create a user (with a wallet)
+- create a user, with a wallet (no auth required)
+- find all users
 - find a user by ID or email
 - update user's name or email
-- delete a user
+- delete a user (only with _ADMIN_ auth)
 
 #### Wallet Controller
 - find a wallet by walletID or userID

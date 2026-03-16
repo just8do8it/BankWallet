@@ -26,7 +26,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Registration and DB usage: public access,
                         // everything else requires USER authentication role
-                        .requestMatchers("/users", "/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         // Delete a user: ADMIN role only
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
